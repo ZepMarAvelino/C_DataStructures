@@ -1,3 +1,11 @@
+/*
+	Author: Avelino Zepeda Martinez
+	Date Created: March 18th, 2020
+	Last Modified: March 23rd, 2020
+
+	Description: Doubly Linked List implementation in C
+*/
+
 #include "linked_list.h"
 
 DoublyLinked_Node_t* linkedlist_initNode(void* srcData, size_t size) {
@@ -17,10 +25,11 @@ DoublyLinked_Node_t* linkedlist_initNode(void* srcData, size_t size) {
 }
 
 DoublyLinked_Node_t* linkedlist_retrieveAddr(LinkedList_t* list, int address) {
-	//Retrieve pointer of said address
 	int half_size = (list->size / 2);
 	DoublyLinked_Node_t* iter_ptr;
 
+	//Retrieve pointer of said address
+	//First the determine the shortest way to retrieve it
 	//If using positive indexing
 	if (address >= 0) {
 		//Decide if traverse from head or tail 
@@ -39,6 +48,7 @@ DoublyLinked_Node_t* linkedlist_retrieveAddr(LinkedList_t* list, int address) {
 	}
 	//If using negative indexing
 	else {
+		//Decide if traverse from head or tail 
 		if ((address * -1) <= half_size) {
 			iter_ptr = list->tail;
 			for (int i = -1; i > address; --i) {
@@ -156,74 +166,97 @@ int linkedlist_add(LinkedList_t* list, void* srcData, size_t size, int address) 
 }
 
 void* linkedlist_remove_head(LinkedList_t* list) {
+	//If the list is empty
 	if (list->size < 1) {
 		return NULL;
 	}
+	//Retrieve the data
 	void* data = list->head->data;
+	//Remove pointer of old head from the list
 	list->head->next_node->prev_node = NULL;
+	//Retrieve pointer of new head
 	DoublyLinked_Node_t* temp = list->head->next_node;
+	//Free node of the old head
 	free(list->head);
+	//Point head of list to new head
 	list->head = temp;
+	//Decrease size
 	list->size--;
 	return data;
 }
 
 void* linkedlist_remove_tail(LinkedList_t* list) {
+	//If list is empty
 	if (list->size < 1) {
 		return NULL;
 	}
+	//Retrieve the data
 	void* data = list->tail->data;
+	//Remove pointer of old tail from the list
 	list->tail->prev_node->next_node = NULL;
+	//Retrieve pointer of new tail
 	DoublyLinked_Node_t* temp = list->tail->prev_node;
+	//Free node of the old tail
 	free(list->tail);
+	//Point tail of list to new tail
 	list->tail = temp;
+	//Decrease list size
 	list->size--;
 	return data;
 }
 
 void* linkedlist_remove(LinkedList_t* list, int address) {
+	//If the list is empty
 	if (list->size < 1) {
 		return NULL;
 	}
 
 	DoublyLinked_Node_t* temp_ptr;
 
-	//If address is greater than the size of the list
+	//If address is greater than the size of the list when using positive indexing, or address is -1 remove the tail
 	if ((address >= (list->size - 1)) || (address == -1)) {
 		temp_ptr = list->tail;
 		list->tail = temp_ptr->prev_node;
 		temp_ptr->prev_node->next_node = NULL;
 	}
-	//Using negative indexing and address is greater than size of the list OR address is equal to 0
+	//Using negative indexing and address is greater than size of the list OR address is equal to 0 remove the head
 	else if ((address <= (list->size) * -1) || (address == 0)) {
 		temp_ptr = list->head;
 		list->head = temp_ptr->next_node;
 		temp_ptr->next_node->prev_node = NULL;
 	}
+	//Otherwise retrieve the pointer to the list, and remove the node
 	else {
 		temp_ptr = linkedlist_retrieveAddr(list, address);	
 		temp_ptr->prev_node->next_node = temp_ptr->next_node;
 		temp_ptr->next_node->prev_node = temp_ptr->prev_node;
 	}
+
+	//Retrieve the data
 	void* data = temp_ptr->data;
-	
+	//Free node
 	free(temp_ptr);
+	//Decrease size of list
 	list->size--;
 	return data;
 }
 
 void* linkedlist_peek(LinkedList_t* list, int address) {
+	//If the list is empty
 	if (list->size < 1) {
 		return NULL;
 	}
 	//Retrieve pointer of said address
 	DoublyLinked_Node_t* iter_ptr;
+	//If the address is the tail
 	if ((address >= (list->size - 1)) || (address == -1)) {
 		iter_ptr = list->tail;
 	}
+	//If the address is the head
 	else if ((address <= (list->size) * -1) || (address == 0)) {
 		iter_ptr = list->head;
 	}
+	//Retrieve the pointer
 	else {
 		iter_ptr = linkedlist_retrieveAddr(list, address);
 	}
@@ -231,20 +264,23 @@ void* linkedlist_peek(LinkedList_t* list, int address) {
 }
 
 size_t linkedlist_peek_dataSize(LinkedList_t* list, int address) {
+	//If the list is empty
 	if (list->size < 1) {
 		return 0;
 	}
 	//Retrieve pointer of said address
 	DoublyLinked_Node_t* iter_ptr;
+	//If the address is the tail
 	if ((address >= (list->size - 1)) || (address == -1)) {
 		iter_ptr = list->tail;
 	}
+	//If the address is the head
 	else if ((address <= (list->size) * -1) || (address == 0)) {
 		iter_ptr = list->head;
 	}
+	//Otherwise retrieve the pointer
 	else {
 		iter_ptr = linkedlist_retrieveAddr(list, address);
 	}
-
 	return iter_ptr->size;
 }

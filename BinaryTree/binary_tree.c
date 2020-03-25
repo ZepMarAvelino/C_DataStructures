@@ -1,6 +1,15 @@
+/*
+	Author: Avelino Zepeda Martinez
+	Date Created: March 21st, 2020
+	Last Modified: March 23rd, 2020
+
+	Description: Sequential Binary Tree implementation in C
+*/
+
 #include "binary_tree.h"
 
 BinaryTree_t* binaryTree_init(BinaryTree_t* tree, unsigned int treeSize) {
+	//Allocate the memory for the nodes, leaving the node at index 0 empty
 	tree->nodeArray = malloc(sizeof(BinaryTreeNode_t) * (treeSize + 1));
 	if (tree->nodeArray == NULL) {
 		return NULL;
@@ -8,6 +17,7 @@ BinaryTree_t* binaryTree_init(BinaryTree_t* tree, unsigned int treeSize) {
 
 	tree->tree_size = treeSize;
 
+	//Initialize each node
 	for (unsigned int i = 0; i <= treeSize; i++) {
 		tree->nodeArray[i].data = NULL;
 		tree->nodeArray[i].data_size = 0;
@@ -16,13 +26,15 @@ BinaryTree_t* binaryTree_init(BinaryTree_t* tree, unsigned int treeSize) {
 }
 
 size_t binaryTree_getDataSize(BinaryTree_t* tree, unsigned int index) {
-	if (index > tree->tree_size) {
+	//Check if the index is out of bounds
+	if ((index > tree->tree_size) || index == 0) {
 		return 0;
 	}
 	return tree->nodeArray[index].data_size;
 }
 
 int binaryTree_getLeftChild(BinaryTree_t* tree, unsigned int index) {
+	//Check if the index is out of bounds
 	if ((index > tree->tree_size) || (index == 0)) {
 		return -1;
 	}
@@ -30,21 +42,27 @@ int binaryTree_getLeftChild(BinaryTree_t* tree, unsigned int index) {
 }
 
 int binaryTree_getRightChild(BinaryTree_t* tree, unsigned int index) {
+	//Check if the index is out of bounds
 	if ((index > tree->tree_size) || (index == 0)) {
 		return -1;
 	}
 	return (2 * index) + 1;
 }
 
-int binaryTree_hasChildren(BinaryTree_t* tree, unsigned int index) {
+bool binaryTree_hasChildren(BinaryTree_t* tree, unsigned int index) {
+	//Check if the index is out of bounds
 	if ((index > tree->tree_size) || (index == 0)) {
 		return false;
 	}
+
+	//Obtain indices of the children
 	int left = binaryTree_getLeftChild(tree, index);
 	int right = binaryTree_getRightChild(tree, index);
+	//If the children are out of bounds
 	if ((left < 1) && (right < 1)) {
 		return false;
 	}
+	//If the children are empty
 	if ((tree->nodeArray[left].data == NULL) && (tree->nodeArray[right].data == NULL)){
 		return false;
 	}
@@ -52,6 +70,7 @@ int binaryTree_hasChildren(BinaryTree_t* tree, unsigned int index) {
 }
 
 int binaryTree_getParent(BinaryTree_t* tree, unsigned int index) {
+	//Check if the index is out of bounds
 	if ((index > tree->tree_size) || (index <= 1)) {
 		return -1;
 	}
@@ -257,4 +276,15 @@ void binaryTree_print(BinaryTree_t* tree) {
 	unsigned int levels = 1;
 	printf("Root: ");
 	binaryTree_printRecursion(tree, index, levels);
+}
+
+void binaryTree_deleteTree(BinaryTree_t* tree) {
+	//Iterate through each element in the array and free the memory
+	for (unsigned int index = 0; index <= tree->tree_size; index++) {
+		free(tree->nodeArray[index].data);
+	}
+	//Free the memory dedicated to the array
+	free(tree->nodeArray);
+	//Free the tree
+	free(tree);
 }
