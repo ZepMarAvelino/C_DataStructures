@@ -24,7 +24,7 @@ DoublyLinked_Node_t* linkedlist_initNode(void* srcData, size_t size) {
 	return linkedNode;
 }
 
-DoublyLinked_Node_t* linkedlist_retrieveAddr(LinkedList_t* list, int address) {
+DoublyLinked_Node_t* linkedlist_retrieveNode(LinkedList_t* list, int address) {
 	int half_size = (list->size / 2);
 	DoublyLinked_Node_t* iter_ptr;
 
