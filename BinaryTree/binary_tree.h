@@ -24,8 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef _BINARY_TREE_H_
-#define _BINARY_TREE_H_
+#ifndef __BINARY_TREE_H__
+#define __BINARY_TREE_H__
 
 typedef struct BinaryTreeNode {
 	void* data;
@@ -34,7 +34,8 @@ typedef struct BinaryTreeNode {
 
 typedef struct BinaryTree {
 	BinaryTreeNode_t* nodeArray;
-	unsigned int tree_size;
+	unsigned int tree_size; // Max size of the tree
+    unsigned int num_nodes; // Current number of nodes in the tree
 }BinaryTree_t;
 
 /*
@@ -168,7 +169,7 @@ bool binaryTree_isEmpty(BinaryTree_t*);
 /*
  * Used by print to iterate through each branch
  */
-void binaryTree_printRecursion(BinaryTree_t*, unsigned int, unsigned int);
+static void binaryTree_printRecursion(BinaryTree_t*, unsigned int, unsigned int);
 
 /*
  * Prints the tree.

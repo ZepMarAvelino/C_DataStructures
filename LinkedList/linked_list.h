@@ -24,8 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifndef _LINKED_LIST_H_
-#define _LINKED_LIST_H_
+#ifndef __LINKED_LIST_H__
+#define __LINKED_LIST_H__
 
 typedef struct DoublyLinked_Node {
 	struct DoublyLinked_Node* prev_node;

@@ -16,6 +16,7 @@ BinaryTree_t* binaryTree_init(BinaryTree_t* tree, unsigned int treeSize) {
 	}
 
 	tree->tree_size = treeSize;
+	tree->num_nodes = 0;
 
 	//Initialize each node
 	for (unsigned int i = 0; i <= treeSize; i++) {
@@ -157,6 +158,8 @@ void* binaryTree_deleteNode(BinaryTree_t* tree, unsigned int index) {
 			tree->nodeArray[current_idx].data_size = 0;
 		}
 	}
+	//Decrease the number of nodes in the tree
+	tree->num_nodes--;
 	return value;
 }
 
@@ -185,6 +188,7 @@ int binaryTree_insert(BinaryTree_t* tree, void* srcValue, size_t dataSize) {
 		if (tree->nodeArray[index].data == NULL) {
 			tree->nodeArray[index].data = dstValue;
 			tree->nodeArray[index].data_size = dataSize;
+			tree->num_nodes++;
 			return 0;
 		}
 	}
@@ -211,6 +215,7 @@ int binaryTree_insertByIndex(BinaryTree_t* tree, void* srcValue, size_t dataSize
 		if (tree->nodeArray[left].data == NULL) {
 			tree->nodeArray[left].data = dstValue;
 			tree->nodeArray[left].data_size = dataSize;
+			tree->num_nodes++;
 			return 0;
 		}
 		//If the right child is not out of bounds
@@ -219,6 +224,7 @@ int binaryTree_insertByIndex(BinaryTree_t* tree, void* srcValue, size_t dataSize
 			if (tree->nodeArray[right].data == NULL) {
 				tree->nodeArray[right].data = dstValue;
 				tree->nodeArray[right].data_size = dataSize;
+				tree->num_nodes++;
 				return 0;
 			}
 			//The given index has both children already assigned
@@ -244,7 +250,7 @@ bool binaryTree_isEmpty(BinaryTree_t* tree) {
 	return false;
 }
 
-void binaryTree_printRecursion(BinaryTree_t* tree, unsigned int index, unsigned int levels) {
+static void binaryTree_printRecursion(BinaryTree_t* tree, unsigned int index, unsigned int levels) {
 	if (index > tree->tree_size) {
 		printf("Out of bounds\n");
 		return;

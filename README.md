@@ -31,3 +31,11 @@ Insertion of a node in the middle of the tree will only happen if the node at sa
 Deletion of a node that has children will cause its children to be shifted up. The default node to be shifted up is the right child. This will be iteratively done until a leaf is reached.
 
 A function to print the tree is available. It will print if it is a left or right child, its index, the number of bytes it holds, and the location at which the node points to for the data.
+
+
+## Future modifications
+
+ - Heap
+ - Graph
+ - Hash Map
+ - **Callback Functions for the remove/delete functions of all data structures**
