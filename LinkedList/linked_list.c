@@ -18,6 +18,9 @@ DoublyLinked_Node_t* linkedlist_initNode(void* srcData, size_t size) {
 
 	//Initialize Node
 	DoublyLinked_Node_t* linkedNode = (DoublyLinked_Node_t*)malloc(sizeof(DoublyLinked_Node_t));
+	if (linkedNode == NULL) {
+		return NULL;
+	}
 	linkedNode->data = nodeData;
 	linkedNode->size = size;
 
@@ -154,7 +157,7 @@ int linkedlist_add(LinkedList_t* list, void* srcData, size_t size, int address) 
 	}
 	//Retrieve the node currently sitting at the address
 	else {
-		DoublyLinked_Node_t* iter_ptr = linkedlist_retrieveAddr(list, address);
+		DoublyLinked_Node_t* iter_ptr = linkedlist_retrieveNode(list, address);
 		//Insert the Node
 		linkedNode->next_node = iter_ptr;
 		linkedNode->prev_node = iter_ptr->prev_node;
@@ -227,7 +230,7 @@ void* linkedlist_remove(LinkedList_t* list, int address) {
 	}
 	//Otherwise retrieve the pointer to the list, and remove the node
 	else {
-		temp_ptr = linkedlist_retrieveAddr(list, address);	
+		temp_ptr = linkedlist_retrieveNode(list, address);	
 		temp_ptr->prev_node->next_node = temp_ptr->next_node;
 		temp_ptr->next_node->prev_node = temp_ptr->prev_node;
 	}
@@ -258,7 +261,7 @@ void* linkedlist_peek(LinkedList_t* list, int address) {
 	}
 	//Retrieve the pointer
 	else {
-		iter_ptr = linkedlist_retrieveAddr(list, address);
+		iter_ptr = linkedlist_retrieveNode(list, address);
 	}
 	return iter_ptr->data;
 }
@@ -280,7 +283,7 @@ size_t linkedlist_peek_dataSize(LinkedList_t* list, int address) {
 	}
 	//Otherwise retrieve the pointer
 	else {
-		iter_ptr = linkedlist_retrieveAddr(list, address);
+		iter_ptr = linkedlist_retrieveNode(list, address);
 	}
 	return iter_ptr->size;
 }

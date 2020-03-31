@@ -8,7 +8,11 @@
 
 #include "binary_tree.h"
 
-BinaryTree_t* binaryTree_init(BinaryTree_t* tree, unsigned int treeSize) {
+BinaryTree_t* binaryTree_init(unsigned int treeSize) {
+	BinaryTree_t* tree = malloc(sizeof(BinaryTree_t));
+	if (tree == NULL) {
+		return NULL;
+	}
 	//Allocate the memory for the nodes, leaving the node at index 0 empty
 	tree->nodeArray = malloc(sizeof(BinaryTreeNode_t) * (treeSize + 1));
 	if (tree->nodeArray == NULL) {
@@ -39,7 +43,12 @@ int binaryTree_getLeftChild(BinaryTree_t* tree, unsigned int index) {
 	if ((index > tree->tree_size) || (index == 0)) {
 		return -1;
 	}
-	return 2 * index;
+	unsigned int left_idx = (2 * index);
+	//If the left child is out of bounds
+	if (left_idx > tree->tree_size) {
+		return -2;
+	}
+	return left_idx;
 }
 
 int binaryTree_getRightChild(BinaryTree_t* tree, unsigned int index) {
@@ -47,7 +56,12 @@ int binaryTree_getRightChild(BinaryTree_t* tree, unsigned int index) {
 	if ((index > tree->tree_size) || (index == 0)) {
 		return -1;
 	}
-	return (2 * index) + 1;
+	unsigned int right_idx = (2 * index) + 1;
+	//if the Right child is out of bounds
+	if (right_idx > tree->tree_size) {
+		return -2;
+	}
+	return right_idx;
 }
 
 bool binaryTree_hasChildren(BinaryTree_t* tree, unsigned int index) {
@@ -145,7 +159,7 @@ void* binaryTree_deleteNode(BinaryTree_t* tree, unsigned int index) {
 		while (binaryTree_hasChildren(tree, current_idx)) {
 			previous_idx = current_idx;
 			//If the current node has a right child. Shift that child up.
-			if (tree->nodeArray[binaryTree_getRightChild(tree, current_idx)].data != NULL) {
+			if ((binaryTree_getRightChild(tree, current_idx) > 0) && (tree->nodeArray[binaryTree_getRightChild(tree, current_idx)].data != NULL)) {
 				current_idx = binaryTree_getRightChild(tree, current_idx);
 			}
 			//Else the shift the left child.
@@ -280,17 +294,19 @@ static void binaryTree_printRecursion(BinaryTree_t* tree, unsigned int index, un
 void binaryTree_print(BinaryTree_t* tree) {
 	unsigned int index = 1;
 	unsigned int levels = 1;
+	printf("Tree with %d nodes\n", tree->num_nodes);
 	printf("Root: ");
 	binaryTree_printRecursion(tree, index, levels);
 }
 
 void binaryTree_deleteTree(BinaryTree_t* tree) {
 	//Iterate through each element in the array and free the memory
+	printf("Deleting\n");
 	for (unsigned int index = 0; index <= tree->tree_size; index++) {
 		free(tree->nodeArray[index].data);
 	}
+	printf("Deleting Node Array\n");
 	//Free the memory dedicated to the array
 	free(tree->nodeArray);
-	//Free the tree
 	free(tree);
 }

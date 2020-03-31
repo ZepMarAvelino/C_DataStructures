@@ -41,12 +41,12 @@ typedef struct BinaryTree {
 /*
  * Initializes a Binary Tree.
  *
- * Takes in a pointer to an unitialized tree and the size of the desired tree.
+ * Takes in the size of the desired tree.
  * Allocates the memory for it, and initializes each node in the tree to a NULL pointer.
  *
  * Returns a pointer to the same tree.
  */
-BinaryTree_t* binaryTree_init(BinaryTree_t*, unsigned int);
+BinaryTree_t* binaryTree_init(unsigned int);
 
 /*
  * Used to retrieve the data size of the node at a given index.
@@ -65,6 +65,8 @@ size_t binaryTree_getDataSize(BinaryTree_t*, unsigned int);
  * If the index is out of bounds it will return a negative number.
  *
  * Returns the index of the left child given an index.
+ * Returns -1 if the input index is out bounds
+ * Returns -2 if the resulting index is out of bounds
  */
 int binaryTree_getLeftChild(BinaryTree_t*, unsigned int);
 
@@ -75,6 +77,8 @@ int binaryTree_getLeftChild(BinaryTree_t*, unsigned int);
  * If the index is out of bounds it will return a negative number.
  *
  * Returns the index of the right child given an index.
+ * Returns -1 if the input index is out bounds
+ * Returns -2 if the resulting index is out of bounds
  */
 int binaryTree_getRightChild(BinaryTree_t*, unsigned int);
 
